@@ -157,12 +157,12 @@ export default function Designs() {
                         onError={(e) => {
                           const target = e.target as HTMLImageElement;
                           target.style.display = 'none';
-                          const placeholder = target.nextElementSibling as HTMLElement;
+                          const placeholder = target.parentElement?.querySelector('.image-placeholder') as HTMLElement;
                           if (placeholder) placeholder.style.display = 'flex';
                         }}
                       />
                     ) : null}
-                    <div className={`w-full h-full ${primaryImage ? 'hidden' : 'flex'} items-center justify-center bg-muted`}>
+                    <div className={`image-placeholder w-full h-full ${primaryImage ? 'hidden' : 'flex'} items-center justify-center bg-muted absolute inset-0`}>
                       <div className="text-center p-4">
                         <svg
                           className="h-12 w-12 mx-auto text-muted-foreground/50 mb-2"
