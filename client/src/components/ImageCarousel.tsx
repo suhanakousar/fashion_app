@@ -10,6 +10,7 @@ interface ImageCarouselProps {
 
 export function ImageCarousel({ images, title }: ImageCarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [imageErrors, setImageErrors] = useState<Set<number>>(new Set());
 
   if (images.length === 0) {
     return (
@@ -18,6 +19,10 @@ export function ImageCarousel({ images, title }: ImageCarouselProps) {
       </div>
     );
   }
+
+  const handleImageError = (index: number) => {
+    setImageErrors((prev) => new Set(prev).add(index));
+  };
 
   const goToPrevious = () => {
     setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
@@ -30,12 +35,34 @@ export function ImageCarousel({ images, title }: ImageCarouselProps) {
   return (
     <div className="space-y-4">
       <div className="relative aspect-[4/5] bg-muted rounded-lg overflow-hidden group">
-        <img
-          src={images[currentIndex].imageUrl}
-          alt={`${title} - Image ${currentIndex + 1}`}
-          className="w-full h-full object-cover"
-          data-testid={`carousel-image-${currentIndex}`}
-        />
+        {imageErrors.has(currentIndex) ? (
+          <div className="w-full h-full flex items-center justify-center">
+            <div className="text-center p-4">
+              <svg
+                className="h-12 w-12 mx-auto text-muted-foreground/50 mb-2"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                />
+              </svg>
+              <p className="text-sm text-muted-foreground">Image not available</p>
+            </div>
+          </div>
+        ) : (
+          <img
+            src={images[currentIndex].imageUrl}
+            alt={`${title} - Image ${currentIndex + 1}`}
+            className="w-full h-full object-cover"
+            data-testid={`carousel-image-${currentIndex}`}
+            onError={() => handleImageError(currentIndex)}
+          />
+        )}
         
         {images.length > 1 && (
           <>
@@ -89,11 +116,30 @@ export function ImageCarousel({ images, title }: ImageCarouselProps) {
               }`}
               data-testid={`carousel-thumb-${index}`}
             >
-              <img
-                src={image.imageUrl}
-                alt={`${title} - Thumbnail ${index + 1}`}
-                className="w-full h-full object-cover"
-              />
+              {imageErrors.has(index) ? (
+                <div className="w-full h-full flex items-center justify-center bg-muted">
+                  <svg
+                    className="h-6 w-6 text-muted-foreground/50"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                    />
+                  </svg>
+                </div>
+              ) : (
+                <img
+                  src={image.imageUrl}
+                  alt={`${title} - Thumbnail ${index + 1}`}
+                  className="w-full h-full object-cover"
+                  onError={() => handleImageError(index)}
+                />
+              )}
             </button>
           ))}
         </div>
