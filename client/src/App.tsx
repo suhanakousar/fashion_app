@@ -3,13 +3,79 @@ import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { ThemeProvider } from "@/lib/theme";
+import { AuthProvider } from "@/lib/auth";
+import { ProtectedRoute } from "@/components/ProtectedRoute";
+
+import Home from "@/pages/Home";
+import DesignDetail from "@/pages/DesignDetail";
+import Booking from "@/pages/Booking";
+import BookingConfirmation from "@/pages/BookingConfirmation";
+import Login from "@/pages/admin/Login";
+import Dashboard from "@/pages/admin/Dashboard";
+import Designs from "@/pages/admin/Designs";
+import DesignEditor from "@/pages/admin/DesignEditor";
+import Clients from "@/pages/admin/Clients";
+import ClientDetail from "@/pages/admin/ClientDetail";
+import Orders from "@/pages/admin/Orders";
+import OrderDetail from "@/pages/admin/OrderDetail";
+import Settings from "@/pages/admin/Settings";
 import NotFound from "@/pages/not-found";
 
 function Router() {
   return (
     <Switch>
-      {/* Add pages below */}
-      {/* <Route path="/" component={Home}/> */}
+      {/* Public Routes */}
+      <Route path="/" component={Home} />
+      <Route path="/design/:id" component={DesignDetail} />
+      <Route path="/book/:designId" component={Booking} />
+      <Route path="/booking/confirm/:orderId" component={BookingConfirmation} />
+      
+      {/* Auth Route */}
+      <Route path="/admin/login" component={Login} />
+      
+      {/* Protected Admin Routes */}
+      <Route path="/admin/dashboard">
+        <ProtectedRoute>
+          <Dashboard />
+        </ProtectedRoute>
+      </Route>
+      <Route path="/admin/designs">
+        <ProtectedRoute>
+          <Designs />
+        </ProtectedRoute>
+      </Route>
+      <Route path="/admin/designs/:id">
+        <ProtectedRoute>
+          <DesignEditor />
+        </ProtectedRoute>
+      </Route>
+      <Route path="/admin/clients">
+        <ProtectedRoute>
+          <Clients />
+        </ProtectedRoute>
+      </Route>
+      <Route path="/admin/clients/:id">
+        <ProtectedRoute>
+          <ClientDetail />
+        </ProtectedRoute>
+      </Route>
+      <Route path="/admin/orders">
+        <ProtectedRoute>
+          <Orders />
+        </ProtectedRoute>
+      </Route>
+      <Route path="/admin/orders/:id">
+        <ProtectedRoute>
+          <OrderDetail />
+        </ProtectedRoute>
+      </Route>
+      <Route path="/admin/settings">
+        <ProtectedRoute>
+          <Settings />
+        </ProtectedRoute>
+      </Route>
+      
       {/* Fallback to 404 */}
       <Route component={NotFound} />
     </Switch>
@@ -19,10 +85,14 @@ function Router() {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Router />
-      </TooltipProvider>
+      <ThemeProvider>
+        <AuthProvider>
+          <TooltipProvider>
+            <Toaster />
+            <Router />
+          </TooltipProvider>
+        </AuthProvider>
+      </ThemeProvider>
     </QueryClientProvider>
   );
 }
