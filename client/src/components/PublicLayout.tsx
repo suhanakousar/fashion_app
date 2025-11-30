@@ -71,6 +71,7 @@ export function PublicLayout({ children }: { children: React.ReactNode }) {
             </div>
 
             <div className="flex items-center gap-2 md:hidden">
+              <PWAInstallButton />
               <ThemeToggle />
               <Button
                 variant="ghost"
