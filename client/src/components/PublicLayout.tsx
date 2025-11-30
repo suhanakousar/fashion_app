@@ -96,6 +96,9 @@ export function PublicLayout({ children }: { children: React.ReactNode }) {
               <Link href="/contact" data-testid="link-mobile-contact">
                 <span className="block py-2 text-base font-medium cursor-pointer">Contact</span>
               </Link>
+              <div className="pt-2">
+                <PWAInstallButton />
+              </div>
               <Link href="/admin/login" data-testid="link-mobile-admin">
                 <Button variant="outline" className="w-full">
                   Designer Login

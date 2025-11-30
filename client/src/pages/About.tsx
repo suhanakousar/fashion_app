@@ -1,11 +1,20 @@
+import { Link } from "wouter";
+import { ArrowLeft } from "lucide-react";
 import { PublicLayout } from "@/components/PublicLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { Scissors, Heart, Sparkles, Users } from "lucide-react";
 
 export default function About() {
   return (
     <PublicLayout>
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <Link href="/" data-testid="link-back">
+          <Button variant="ghost" className="gap-2 mb-6">
+            <ArrowLeft className="h-4 w-4" />
+            Back to Gallery
+          </Button>
+        </Link>
         <div className="text-center mb-12">
           <h1 className="font-serif text-4xl md:text-5xl font-semibold mb-4">
             About Rajiya Fashion
